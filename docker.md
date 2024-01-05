@@ -3,8 +3,16 @@
 <span style="color: red;">docker hub</span> - хранилище образов
 <span style="color: red;">docker container</span> - docker контейнер
 <span style="color: red;">поднять контейнер</span> - запустить
+<span style='color: red;'>docker exec -it \имя контейнера\ bash</span> - вход в наш контейнер для выполнения команд внутри него
+(для определённого контейнера выполнять - composer install)
+<span style="color: red;">docker-compose up -d</span> - запуск контейнера
+<span style="color: red;">docker-compose down</span> - остановка контейнера
+<span style="color: red;">docker exec \имя контейнера\ nginx -s reload</span> - перезапуск сервиса внутри контейнера
+
 
 <h2>Настройки для docker-compose.yml</h2>
+
+Настройка файла
 
 ```
 version: '3'
@@ -78,9 +86,11 @@ services:
           MYSQL_ROOT_PASSWORD: root - \\ права
 ```
 
-<span style="color: red;">docker-compose up -d</span> - запуск контейнера
 
 <h2>nginx.conf</h2>
+
+Настройка файла
+
 ```
 server {
 
@@ -139,4 +149,71 @@ server {
 }
 ```
 
-<span style='color: red;'>docker exec -it \имя контейнера\ bash</span> - вход в наш контейнер для выполнения команд внутри него
+<h2>php.ini</h2>
+Настройка файла
+
+```
+cgi.fix_pathinfo=0
+
+max_execution_time = 1000
+
+max_input_time = 1000
+
+memory_limit=4G
+```
+
+<h2 style="color:red;">Dockerfile</h2>
+
+Настройка файла
+
+```
+FROM php:8.2-fpm
+
+  
+
+RUN apt-get update && apt-get install -y \
+
+      apt-utils \
+
+      libpq-dev \
+
+      libpng-dev \
+
+      libzip-dev \
+
+      zip unzip \
+
+      git && \
+
+      docker-php-ext-install pdo_mysql && \
+
+      docker-php-ext-install bcmath && \
+
+      docker-php-ext-install gd && \
+
+      docker-php-ext-install zip && \
+
+      apt-get clean && \
+
+      rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+
+  
+
+COPY ./_docker/app/php.ini /usr/local/etc/php/conf.d/php.ini
+
+  
+
+# Install composer
+
+ENV COMPOSER_ALLOW_SUPERUSER=1
+
+RUN curl -sS https://getcomposer.org/installer | php -- \
+
+    --filename=composer \
+
+    --install-dir=/usr/local/bin
+
+  
+
+WORKDIR /var/www
+```
