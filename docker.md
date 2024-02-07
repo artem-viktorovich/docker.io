@@ -8,6 +8,8 @@
 <span style="color: red;">docker-compose up -d</span> - запуск контейнера
 <span style="color: red;">docker-compose down</span> - остановка контейнера
 <span style="color: red;">docker exec \имя контейнера\ nginx -s reload</span> - перезапуск сервиса внутри контейнера
+<span style="color: red;">docker builder prune</span> - очистка кэша докера
+
 
 
 <h2>Настройки для docker-compose.yml</h2>
